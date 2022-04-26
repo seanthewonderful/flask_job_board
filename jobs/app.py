@@ -57,16 +57,20 @@ def review(employer_id):
         execute_sql(f'INSERT INTO review ({review}, {rating}, {title}, {date}, {status}, {employer_id}) VALUES ({review}, {rating}, {title}, {date}, {status}, {employer_id})', commit=True)
         return redirect(url_for("employer", employer_id=employer_id))
     return render_template("review.html", employer_id=employer_id)
-    
+
+
+@app.route('/job/<job_id>')
+def job(job_id):
+    job = execute_sql(f'SELECT job.id, job.title, job.description, job.salary, employer.id as employer_id, employer.name as employer_name FROM job JOIN employer ON employer.id = job.employer_id WHERE job.id = {job_id}', single=True)
+    return render_template("job.html", job=job)
+
     
 @app.route('/')
 @app.route('/jobs')
-@app.route('/jobs/<job_id>')
-def jobs(job_id):
+def jobs():
     jobs = execute_sql(f'SELECT job.id, job.title, job.description, job.salary, employer.id as employer_id, employer.name as employer_name FROM job JOIN employer ON employer.id = job.employer_id')
-    job = execute_sql(f'SELECT job.id, job.title, job.description, job.salary, employer.id as employer_id, employer.name as employer_name FROM job JOIN employer ON employer.id = job.employer_id WHERE job.id = {job_id}', single=True)
     reviews = execute_sql(f'SELECT review, rating, title, date, status FROM review JOIN employer ON employer.id = review.employer_id WHERE employer.id = ?')
-    return render_template("index.html", jobs=jobs, job=job, reviews=reviews)
+    return render_template("index.html", jobs=jobs, reviews=reviews)
 
 
 

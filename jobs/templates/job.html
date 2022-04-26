@@ -1,0 +1,9 @@
+{% from '_macros.html' import show_job, show_jobs with context %}
+
+{% extends from "layout.html" %}
+
+{% block content %}
+
+{{ show_job(job) }}
+
+{% endblock %}
