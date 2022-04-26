@@ -61,6 +61,7 @@ def review(employer_id):
     
 @app.route('/')
 @app.route('/jobs')
+@app.route('/jobs/<job_id>')
 def jobs(job_id):
     jobs = execute_sql(f'SELECT job.id, job.title, job.description, job.salary, employer.id as employer_id, employer.name as employer_name FROM job JOIN employer ON employer.id = job.employer_id')
     job = execute_sql(f'SELECT job.id, job.title, job.description, job.salary, employer.id as employer_id, employer.name as employer_name FROM job JOIN employer ON employer.id = job.employer_id WHERE job.id = {job_id}', single=True)
